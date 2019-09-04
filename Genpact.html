@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/iihabgolllpckbhencdcnmonmgohagjm">-->
+    <link href="/i/images/apple-touch-icon-57x57.png" rel="apple-touch-icon" sizes="57x57" />
+    <link href="/i/images/apple-touch-icon-60x60.png" rel="apple-touch-icon" sizes="60x60" />
+    <link href="/i/images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72" />
+    <link href="/i/images/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76" />
+    <link href="/i/images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114" />
+    <link href="/i/images/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120" />
+    <link href="/i/images/apple-touch-icon-144x144.png" rel="apple-touch-icon" sizes="144x144" />
+    <link href="/i/images/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152" />
+    <link href="/i/images/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180" />
+    <link href="/i/images/manifest.json" rel="manifest" />
+    <meta content="#b91d47" name="msapplication-TileColor" />
+    <meta content="/i/imagesmstile-144x144.png" name="msapplication-TileImage" />
+    <meta content="/i/imagesbrowserconfig.xml" name="msapplication-config" />
+    <meta content="#316cc4" name="theme-color" />
+
+    <style>
+      #splashscreen {
+        background: url(/i/images/loading.gif) rgba(240, 240, 240, 0.8) no-repeat center center;
+        background-size: 45px;
+        position: fixed;
+        z-index: 99999;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        visibility: visible;
+        opacity: 1;
+        -webkit-transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+        -o-transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+        transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+      }
+
+      #splashscreen.loaded {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      #splashscreen.swisreloading {
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min.js"></script>
+    <script type="text/javascript">
+      // Start -- load translations
+      let language = window.localStorage.getItem('selectedLanguage');
+      if (language) {
+        let translationDomain = window.location.hostname.match(/lvh\.me/)
+          ? 'dol6fvsidtwsq.cloudfront.net'
+          : window.location.hostname;
+        let xmlHttp = new XMLHttpRequest();
+        let translationJSON = {};
+        xmlHttp.open(
+          'GET',
+          'https://' + translationDomain + '/translations/' + language + '/edcast_translation.csv',
+          false
+        ); // false for synchronous request
+        xmlHttp.send('');
+        Papa.parse(xmlHttp.responseText).data.forEach(function(a) {
+          translationJSON[a[0]] = a[1];
+        });
+        window.translations = translationJSON;
+      } else {
+        window.translations = {};
+      }
+      // End -- load translations
+
+      window.localStorage.setItem('enableConsoleLog', 'true');
+      // Do window.localStorage.setItem("enableConsoleLog", "true") to enable console.log
+      // Remove enableConsoleLog entry from localStorage to disable console.log
+      var consoleLogEnabled = !!window.localStorage.getItem('enableConsoleLog');
+      if (!consoleLogEnabled) {
+        if (!window.console) {
+          window.console = {};
+        }
+        var methods = ['log', 'debug', 'warn', 'info'];
+        for (var i = 0; i < methods.length; i++) {
+          console[methods[i]] = function() {};
+        }
+      }
+
+      var APP_ID = 'nd7di7ge';
+      window.intercomSettings = {
+        app_id: APP_ID
+      };
+
+      (function() {
+        var w = window;
+        var ic = w.Intercom;
+        if (typeof ic === 'function') {
+          ic('reattach_activator');
+          ic('update', intercomSettings);
+        } else {
+          var d = document;
+          var i = function() {
+            i.c(arguments);
+          };
+          i.q = [];
+          i.c = function(args) {
+            i.q.push(args);
+          };
+          w.Intercom = i;
+
+          function l() {
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://widget.intercom.io/widget/' + APP_ID;
+            var x = d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+          }
+          if (w.attachEvent) {
+            w.attachEvent('onload', l);
+          } else {
+            w.addEventListener('load', l, false);
+          }
+        }
+      })();
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(function(registration) {
+          registration.unregister().then(function() {
+            // this promise resolves only if a registration is found (exists)
+            window.location.reload();
+          });
+        });
+      }
+    </script>
+  </head>
+
+  <body style="background:#F0F0F5">
+    <div id="splashscreen"></div>
+
+    <div id="edc-web-body"></div>
+
+    <script src="/assets.js" async></script>
+  </body>
+</html>
