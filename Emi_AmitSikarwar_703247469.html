@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html >
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body ng-app >
+<center>
+<h1>Calculate EMI</h1>
+<table id = "rcor">
+<tr><td>
+<table border = 0>
+<tr>
+ <td>Select Amount :</td>
+ <td><select ng-model = "pamt" type = "number">
+<option type = "number" value = "10000">1000</option>
+<option type = "number" value = "20000">2000</option>
+<option type = "number" value = "30000">3000</option>
+</select></td>
+
+<tr>
+<td>Rate of interest :</td> <td><input type = "number" ng-model = "proi"></td>
+</tr>
+<tr>
+<td>Years :</td> <td><input type = "number" ng-model = "pyears"></td>
+</tr>
+</table>
+<center>Your EMI is : <span>{{ ((pamt*1) + (pamt*(proi/100)*pyears)) }}</span></center>
+</td></tr></table>
+</center>
+</body>
+</html>
